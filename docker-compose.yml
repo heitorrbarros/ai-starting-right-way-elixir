@@ -6,6 +6,8 @@ services:
     container_name: elixir-app
     user: "1001:1001"
     tty: true
+    ports:
+      - "8080:8080"
     environment:
       HOME: /home/ai-dome/project
     working_dir: /home/ai-dome/project
