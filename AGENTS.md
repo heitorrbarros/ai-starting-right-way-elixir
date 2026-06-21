@@ -1,3 +1,9 @@
+# AGENTS.md — AI Instructions
+
+See [README.md](./README.md) for project context: this repo uses **opencode** as the AI tool and operates inside an **AI dome** that sandboxes the AI from the host.
+
+---
+
 # LLM Wiki Schema
 
 This document defines how the LLM maintains this wiki. The wiki is a persistent, interlinked collection of markdown files that sits between raw sources and queries. Knowledge is compiled once and kept current — not re-derived on every question.
@@ -5,14 +11,15 @@ This document defines how the LLM maintains this wiki. The wiki is a persistent,
 ## Directory Structure
 
 ```
-raw/              # Immutable source documents (articles, papers, notes)
-wiki/             # LLM-generated markdown files — the wiki
-  index.md        # Content-oriented catalog of every page
-  log.md          # Append-only chronological record
-  entities/       # Pages for people, places, organizations, etc.
-  concepts/       # Pages for ideas, theories, patterns
-  sources/        # Pages summarizing individual sources
-  synthesis/      # Cross-cutting analyses, comparisons, overviews
+knowlegde/          # Knowledge base root
+  raw/              # Immutable source documents (articles, papers, notes)
+  wiki/             # LLM-generated markdown files — the wiki
+    index.md        # Content-oriented catalog of every page
+    log.md          # Append-only chronological record
+    entities/       # Pages for people, places, organizations, etc.
+    concepts/       # Pages for ideas, theories, patterns
+    sources/        # Pages summarizing individual sources
+    synthesis/      # Cross-cutting analyses, comparisons, overviews
 ```
 
 ## Conventions
@@ -20,6 +27,7 @@ wiki/             # LLM-generated markdown files — the wiki
 - All wiki pages are markdown with `.md` extension
 - Use `[[wikilink]]` syntax for cross-references between wiki pages
 - Every page has a title (`# Title`), a brief description, and relevant wikilinks
+- All paths are relative to `knowlegde/`
 - Source pages link back to the raw file path
 - Entity and concept pages list related sources and related entities/concepts
 - The LLM writes and updates all wiki pages; the user reads and curates
@@ -28,23 +36,23 @@ wiki/             # LLM-generated markdown files — the wiki
 
 ### Ingest
 
-When the user adds a new source to `raw/` and asks to ingest:
+When the user adds a new source to `knowlegde/raw/` and asks to ingest:
 
 1. Read the source document
 2. Discuss key takeaways with the user
-3. Write a summary page in `wiki/sources/`
-4. Update `wiki/index.md` — add the new page with a one-line summary
-5. Update relevant entity and concept pages across `wiki/entities/` and `wiki/concepts/`
-6. Append an entry to `wiki/log.md` with prefix: `## [YYYY-MM-DD] ingest | Title`
+3. Write a summary page in `knowlegde/wiki/sources/`
+4. Update `knowlegde/wiki/index.md` — add the new page with a one-line summary
+5. Update relevant entity and concept pages across `knowlegde/wiki/entities/` and `knowlegde/wiki/concepts/`
+6. Append an entry to `knowlegde/wiki/log.md` with prefix: `## [YYYY-MM-DD] ingest | Title`
 
 ### Query
 
 When the user asks a question:
 
-1. Read `wiki/index.md` to find relevant pages
+1. Read `knowlegde/wiki/index.md` to find relevant pages
 2. Read those pages
 3. Synthesize an answer with citations to wiki pages
-4. If the answer produces valuable new knowledge (comparison, analysis, connection), file it as a new page in `wiki/synthesis/` and update `index.md`
+4. If the answer produces valuable new knowledge (comparison, analysis, connection), file it as a new page in `knowlegde/wiki/synthesis/` and update `index.md`
 
 ### Lint
 
@@ -57,7 +65,7 @@ Periodically or on request, health-check the wiki:
 - Note missing cross-references
 - Suggest new questions and sources to investigate
 
-## Index (`wiki/index.md`)
+## Index (`knowlegde/wiki/index.md`)
 
 A catalog listing every wiki page with:
 - Link to the page
@@ -67,7 +75,7 @@ A catalog listing every wiki page with:
 
 Updated on every ingest. The LLM reads this first when answering queries.
 
-## Log (`wiki/log.md`)
+## Log (`knowlegde/wiki/log.md`)
 
 Append-only chronological record. Each entry starts with:
 ```
@@ -76,7 +84,7 @@ Append-only chronological record. Each entry starts with:
 
 Operations: `ingest`, `query`, `lint`, `synthesis`.
 
-Parseable with: `grep "^## \[" wiki/log.md | tail -5`
+Parseable with: `grep "^## \[" knowlegde/wiki/log.md | tail -5`
 
 ## Priorities
 
