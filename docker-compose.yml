@@ -1,0 +1,41 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: elixir-app
+    user: "1001:1001"
+    tty: true
+    environment:
+      HOME: /home/ai-dome/project
+    working_dir: /home/ai-dome/project
+    volumes:
+      - .:/home/ai-dome/project
+
+  ai:
+    build:
+      context: .
+      dockerfile: Dockerfile.ai
+    container_name: opencode-ai
+    user: "1001:1001"
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:uid=1001,gid=1001,exec
+      - /home/ai-dome/.config:uid=1001,gid=1001
+      - /home/ai-dome/.local:uid=1001,gid=1001
+      - /home/ai-dome/.cache:uid=1001,gid=1001
+      - /home/ai-dome/.npm:uid=1001,gid=1001
+    environment:
+      HOME: /home/ai-dome
+      XDG_CONFIG_HOME: /home/ai-dome/.config
+      XDG_DATA_HOME: /home/ai-dome/.local
+      XDG_CACHE_HOME: /home/ai-dome/.cache
+    working_dir: /home/ai-dome/project
+    command: ["tail", "-f", "/dev/null"]
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/home/ai-dome/project
