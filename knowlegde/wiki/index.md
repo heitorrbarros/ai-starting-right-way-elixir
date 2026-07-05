@@ -10,3 +10,4 @@
 ## Synthesis
 
 - [[http-server-decision]] — HTTP Server: Bandit vs Cowboy
+- [[wiki-commands]] — opencode commands for wiki ingest, lint, and log

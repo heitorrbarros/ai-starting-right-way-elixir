@@ -21,3 +21,7 @@ Added `Jameswebb.Cache` — Nebulex partitioned cache for backends health, strat
 ## [2026-07-04] synthesis | HTTP Server Decision (Bandit)
 
 Chose Bandit over Cowboy for the HTTP server. Created [[http-server-decision]] synthesis page with comparison and rationale. Updated [[jameswebb-architecture]] supervision tree and data flow to reflect Bandit + Plug.Router. Added `bandit` and `plug` deps to mix.exs; implemented `Jameswebb.Router` (Plug.Router). App now listens on port 8080.
+
+## [2026-07-04] synthesis | Wiki Commands
+
+Created three opencode custom commands for wiki maintenance: `/wiki-ingest`, `/wiki-lint`, `/wiki-log`. Encodes the Karpathy LLM wiki ingest/lint/log operations from AGENTS.md into reusable commands. Created [[wiki-commands]] synthesis page with decision rationale and usage. Updated index.md and README.md.
