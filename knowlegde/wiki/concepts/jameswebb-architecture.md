@@ -2,18 +2,27 @@
 
 A simple, OTP-native HTTP load balancer built in Elixir. Named after the James Webb Space Telescope — observing, relaying, and balancing signals.
 
-## Supervision Tree (Two-Level)
+## HTTP Server: Bandit
+
+Jameswebb uses **Bandit** as its HTTP server (see [[http-server-decision]] for the rationale). The server is started directly in the top-level supervision tree with `{Bandit, plug: Jameswebb.Router, port: 8080}`.
+
+`Jameswebb.Router` is a `Plug.Router` that handles incoming requests. Currently serves a health/status endpoint at `GET /` and a 404 catch-all. Routes will expand as the proxy and ops features are implemented.
+
+## Supervision Tree (Planned)
 
 ```
 Application
  └── Jameswebb.Supervisor (top-level)
-      ├── Jameswebb.Cache               # Nebulex distributed cache (partitioned)
-      ├── Jameswebb.ConfigWatcher       # Reads/reloads YAML config
-      ├── Jameswebb.BalancerSupervisor  # Mid-level supervisor
-      │    ├── Jameswebb.Proxy          # GenServer per backend — reverse proxy via Finch/Mint
-      │    └── Jameswebb.HealthChecker  # Periodic active health checks
-      └── Jameswebb.Strategy            # GenServer — picks backend using current algorithm
+      ├── Bandit                       # HTTP server (Plug.Router)
+      ├── Jameswebb.Cache              # Nebulex distributed cache (partitioned)
+      ├── Jameswebb.ConfigWatcher      # Reads/reloads YAML config
+      ├── Jameswebb.BalancerSupervisor # Mid-level supervisor
+      │    ├── Jameswebb.Proxy         # GenServer per backend — reverse proxy
+      │    └── Jameswebb.HealthChecker # Periodic active health checks
+      └── Jameswebb.Strategy           # GenServer — picks backend using current algorithm
 ```
+
+**Current state:** Only Bandit is running. Cache, ConfigWatcher, BalancerSupervisor, and Strategy are commented out in the supervisor, awaiting implementation.
 
 ## Core Design Principles
 
@@ -77,12 +86,13 @@ cache:
 
 ## Data Flow
 
-1. Client connects to `Jameswebb.Acceptor` (listens on configured port).
-2. Acceptor delegates to `Jameswebb.Router` which calls `Strategy.pick/1`.
-3. Strategy returns a backend URL (considering current health status).
-4. Request is forwarded to `Jameswebb.Proxy` for that backend.
-5. Response is streamed back to the client.
-6. Telemetry events fired at each stage.
+1. Client connects to Bandit (listens on port 8080).
+2. Bandit delegates to `Jameswebb.Router` (a `Plug.Router`).
+3. Router calls `Strategy.pick/1` to select a backend.
+4. Strategy returns a backend URL (considering current health status).
+5. Request is forwarded to `Jameswebb.Proxy` for that backend.
+6. Response is streamed back to the client.
+7. Telemetry events fired at each stage.
 
 ## Telemetry Events
 
@@ -92,36 +102,14 @@ cache:
 - `[:jameswebb, :health, :down]` — backend went offline
 - `[:jameswebb, :config, :reload]` — config hot-reloaded
 
-## Web UI: Ops Page (Phoenix + Tailwind)
+## Web UI: Ops Page (Planned)
 
-A management dashboard at the root path (`GET /`) using a single **Phoenix LiveView** with **Tailwind CSS** — no router needed.
+A management dashboard at the root path (`GET /`). Not yet implemented. Options under consideration:
 
-### Components
+- **Phoenix LiveView** — full interactivity, server-rendered, real-time updates via telemetry subscriptions
+- **Bandit + Plug + SSE** — lighter weight, no Phoenix dependency, server-sent events for live updates
 
-- **`Jameswebb.OpsView`** — LiveView that subscribes to telemetry events and ETS health table
-- **`Jameswebb.OpsView.BackendCard`** — rendered component per backend showing URL, status (green/red badge), active connections, uptime
-- **`Jameswebb.OpsView.MetricsPanel`** — rendered component with request rate, success/error counts
-- **`Jameswebb.OpsView.Controls`** — form to add a new backend (URL + health check path), toggle algorithm, trigger health check refresh
-
-### Data Flow
-
-```
-HealthChecker ───> Jameswebb.Cache ──┐
-Proxy ───────────> Jameswebb.Cache ──┤
-Strategy ────────> Jameswebb.Cache ──┤
-                                    ├──> OpsView LiveView (subscribed via :telemetry)
-                                    │       ├── renders BackendCard × N
-                                    │       ├── renders MetricsPanel
-                                    │       └── renders Controls (socket events → ConfigWatcher)
-                                    │
-                                    └──> Other LB nodes (via Nebulex partitioned adapter)
-```
-
-### Tailwind Use
-
-Minimal Tailwind usage for badges, grid layout, status indicators. The Phoenix app includes the standard Tailwind setup from `mix phx.new`.
-
-### OPS Page Capabilities
+### Planned Capabilities
 
 - View all backends live (up/down, connections, uptime)
 - Toggle between `round_robin` and `least_connections` on the fly

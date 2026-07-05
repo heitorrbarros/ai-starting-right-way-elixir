@@ -20,6 +20,8 @@ defmodule Jameswebb.MixProject do
 
   defp deps do
     [
+      {:bandit, "~> 1.6"},
+      {:plug, "~> 1.16"},
       {:yaml_elixir, "~> 2.11"},
       {:nebulex, "~> 2.6"},
       {:shards, "~> 1.1"}

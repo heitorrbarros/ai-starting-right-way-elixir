@@ -9,10 +9,7 @@ defmodule Jameswebb.Supervisor do
   @impl true
   def init(:ok) do
     children = [
-      # Jameswebb.Cache,
-      # Jameswebb.ConfigWatcher,
-      # {Jameswebb.BalancerSupervisor, []},
-      # Jameswebb.Strategy
+      {Bandit, plug: Jameswebb.Router, port: 8080}
     ]
 
     Supervisor.init(children, strategy: :one_for_one)

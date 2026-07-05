@@ -17,3 +17,7 @@ Added ops management page: Phoenix LiveView at root path with Tailwind CSS. Full
 ## [2026-06-21] concept | Nebulex Distributed Cache
 
 Added `Jameswebb.Cache` — Nebulex partitioned cache for backends health, strategy state, and metrics. Enables multi-node LB deployments with shared distributed state. Falls back to ETS for single-node. Updated supervision tree and config schema.
+
+## [2026-07-04] synthesis | HTTP Server Decision (Bandit)
+
+Chose Bandit over Cowboy for the HTTP server. Created [[http-server-decision]] synthesis page with comparison and rationale. Updated [[jameswebb-architecture]] supervision tree and data flow to reflect Bandit + Plug.Router. Added `bandit` and `plug` deps to mix.exs; implemented `Jameswebb.Router` (Plug.Router). App now listens on port 8080.
