@@ -22,7 +22,7 @@ Application
       └── Jameswebb.Strategy           # GenServer — picks backend using current algorithm
 ```
 
-**Current state:** Only Bandit is running. Cache, ConfigWatcher, BalancerSupervisor, and Strategy are commented out in the supervisor, awaiting implementation.
+**Current state:** Bandit and Cache are running. ConfigWatcher, BalancerSupervisor, and Strategy remain commented out in the supervisor, awaiting implementation.
 
 ## Core Design Principles
 
@@ -102,14 +102,11 @@ cache:
 - `[:jameswebb, :health, :down]` — backend went offline
 - `[:jameswebb, :config, :reload]` — config hot-reloaded
 
-## Web UI: Ops Page (Planned)
+## Web UI: Ops Page
 
-A management dashboard at the root path (`GET /`). Not yet implemented. Options under consideration:
+A management dashboard at the root path (`GET /`). Implemented with **Phoenix LiveView** and Tailwind CSS. Provides live management of backends, algorithm selection, health checks, and metrics.
 
-- **Phoenix LiveView** — full interactivity, server-rendered, real-time updates via telemetry subscriptions
-- **Bandit + Plug + SSE** — lighter weight, no Phoenix dependency, server-sent events for live updates
-
-### Planned Capabilities
+### Capabilities
 
 - View all backends live (up/down, connections, uptime)
 - Toggle between `round_robin` and `least_connections` on the fly
@@ -123,3 +120,4 @@ A management dashboard at the root path (`GET /`). Not yet implemented. Options 
 - [[ousterhout-philosophy]] — deep modules, information hiding
 - [[conventional-commits]] — commit message convention
 - [[nebulex]] — Nebulex distributed caching library
+- [[semver]] — Semantic Versioning

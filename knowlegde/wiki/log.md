@@ -25,3 +25,16 @@ Chose Bandit over Cowboy for the HTTP server. Created [[http-server-decision]] s
 ## [2026-07-04] synthesis | Wiki Commands
 
 Created three opencode custom commands for wiki maintenance: `/wiki-ingest`, `/wiki-lint`, `/wiki-log`. Encodes the Karpathy LLM wiki ingest/lint/log operations from AGENTS.md into reusable commands. Created [[wiki-commands]] synthesis page with decision rationale and usage. Updated index.md and README.md.
+
+## [2026-07-04] lint | Health check
+
+Ran structured lint pass over all wiki pages. Report: 2 contradictions (ops page status, cache status), 2 stale claims, 0 orphans, 3 broken wikilinks (semver, nebulex, AGENTS.md), 5 missing cross-references suggested, 4 coverage gaps identified.
+
+## [2026-07-04] lint | Fixes applied
+
+Fixed all lint issues per user approval:
+- Updated stale claims in [[jameswebb-architecture]] (ops page decision, cache status)
+- Created [[semver]] and [[nebulex]] concept pages
+- Replaced broken `[[AGENTS.md]]` wikilink with [[index]] link in [[wiki-commands]]
+- Added cross-references: ousterhout-philosophy → jameswebb-architecture + http-server-decision; conventional-commits → ousterhout-philosophy; http-server-decision → wiki-commands
+- Updated [[index]] with new pages

@@ -39,3 +39,4 @@ Jameswebb is an OTP-native HTTP load balancer. It needs an HTTP server to:
 
 - [[jameswebb-architecture]] — overall architecture, supervision tree
 - [[ousterhout-philosophy]] — deep modules principle applied to clean router separation
+- [[wiki-commands]] — opencode commands for wiki maintenance

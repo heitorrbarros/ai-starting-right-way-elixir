@@ -26,5 +26,5 @@ The project follows the Karpathy LLM wiki pattern as defined in [[AGENTS.md]]. T
 
 ## Related
 
-- [[AGENTS.md]] — the wiki schema that defines the operations
+- [[index]] — content catalog of all wiki pages
 - [[http-server-decision]] — prior synthesis page following the same pattern

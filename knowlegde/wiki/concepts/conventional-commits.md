@@ -41,4 +41,4 @@ Correlates with `MAJOR` in SemVer.
 
 This project uses Conventional Commits 1.0.0 for all commit messages.
 
-Related: [[semver]]
+Related: [[semver]], [[ousterhout-philosophy]]

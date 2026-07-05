@@ -4,8 +4,10 @@
 ## Concepts
 
 - [[conventional-commits]] — Conventional Commits
-- [[jameswebb-architecture]] — Jameswebb — Elixir Load Balancer Architecture
+- [[jameswebb-architecture]] — Jameswebb Elixir Load Balancer Architecture
+- [[nebulex]] — Nebulex Distributed Cache
 - [[ousterhout-philosophy]] — Ousterhout Philosophy of Software Design
+- [[semver]] — Semantic Versioning
 
 ## Synthesis
 

@@ -47,4 +47,4 @@ Good code comments explain things that aren't obvious from the code itself: desi
 
 This project follows Ousterhout's philosophy as its primary design principle. All design decisions should favor deep modules, simplicity of interface, and strategic investment in good abstractions.
 
-Related: [[conventional-commits]]
+Related: [[conventional-commits]], [[jameswebb-architecture]], [[http-server-decision]]
